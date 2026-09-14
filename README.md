@@ -1,5 +1,15 @@
 # 🔷 LicitaAI
 
+<div align="center">
+
+## 🚀 Projeto online
+
+### 🌐 [Acessar o LicitaAI](https://licitaai.abacusai.app)
+
+**Explore a plataforma de gestão e acompanhamento de licitações públicas.**
+
+</div>
+
 > **Plataforma full-stack para explorar, acompanhar e gerenciar licitações públicas em um só lugar.**
 
 <p align="center">
