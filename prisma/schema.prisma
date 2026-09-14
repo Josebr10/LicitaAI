@@ -1,0 +1,73 @@
+generator client {
+    provider = "prisma-client-js"
+    binaryTargets = ["native", "linux-musl-arm64-openssl-3.0.x"]
+    output = "/home/ubuntu/licitaai/nextjs_space/node_modules/.prisma/client"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+enum Status {
+  RASCUNHO
+  PUBLICADA
+  EM_ANALISE
+  EM_ANDAMENTO
+  HOMOLOGADA
+  ENCERRADA
+  CANCELADA
+}
+
+enum Modalidade {
+  PREGAO_ELETRONICO
+  CONCORRENCIA
+  CONCURSO
+  LEILAO
+  DIALOGO_COMPETITIVO
+  DISPENSA
+  INEXIGIBILIDADE
+}
+
+model User {
+  id         String      @id @default(cuid())
+  name       String
+  email      String      @unique
+  password   String
+  role       Role        @default(USER)
+  createdAt  DateTime    @default(now()) @map("criado_em")
+  updatedAt  DateTime    @updatedAt @map("atualizado_em")
+  licitacoes Licitacao[]
+
+  @@map("usuarios")
+}
+
+model Licitacao {
+  id              String     @id @default(cuid())
+  numero          String
+  nome            String
+  edital          String
+  status          Status     @default(RASCUNHO)
+  verbaLiberada   Decimal    @map("verba_liberada") @db.Decimal(15, 2)
+  orgao           String
+  objeto          String
+  modalidade      Modalidade
+  valorEstimado   Decimal    @map("valor_estimado") @db.Decimal(15, 2)
+  dataPublicacao  DateTime?  @map("data_publicacao")
+  dataAbertura    DateTime?  @map("data_abertura")
+  observacoes     String?    @db.Text
+  criadoPor       String     @map("criado_por")
+  criador         User       @relation(fields: [criadoPor], references: [id])
+  createdAt       DateTime   @default(now()) @map("criado_em")
+  updatedAt       DateTime   @updatedAt @map("atualizado_em")
+
+  @@index([status])
+  @@index([modalidade])
+  @@index([criadoPor])
+  @@map("licitacoes")
+}
